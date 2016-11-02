@@ -11,8 +11,8 @@ window.onload = function (){
     pieces = $('#puzzlearea > div '); //puzzlearea.getElementsByTagName('div');
 
     for (var i=0; i<pieces.length; i++){
-        pieces[i].style.backgroundImage="url('g.png')";
-        pieces[i].className = 'puzzlepiece';
+        pieces[i].style.backgroundImage="url('images.jpg')";
+        pieces[i].className = 'puzzlepiece';		
         pieces[i].style.left = (i%4*100)+'px';
         pieces[i].style.top = (parseInt(i/4)*100) + 'px';
         pieces[i].style.backgroundPosition= '-' + pieces[i].style.left + ' ' + '-' + pieces[i].style.top;
