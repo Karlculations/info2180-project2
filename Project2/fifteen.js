@@ -2,8 +2,8 @@ var shufflebutton;
 var pieces;
 var blink;
 var timer;
-var whiteSpaceY;
-var whiteSpaceX;
+var emptySpaceY;
+var emptySpaceX;
 //end of game alert was implemented
 window.onload = function (){
     //var puzzlearea = document.getElementById('puzzlearea');
@@ -29,8 +29,8 @@ window.onload = function (){
 
         pieces[i].onclick = function(){
             if (checkCanMove(parseInt(this.innerHTML))){
-                swap(this.innerHTML-1); //exchange tile with white space
-                if (checkFinish()){ //is the puzzle complete?
+                switchTiles(this.innerHTML-1); //exchange tile with white space
+                if (isFinish()){ //is the puzzle complete?
                     youWin(); //you won XD
                 }
                 return;
@@ -38,38 +38,38 @@ window.onload = function (){
         };
     }
 
-    whiteSpaceX = '300px';
-    whiteSpaceY = '300px';
+    emptySpaceX = '300px';
+    emptySpaceY = '300px';
 
     $('#shufflebutton').click( function(){
         for (var i=0; i<250; i++){
             var rand = parseInt(Math.random()* 100) %4;
             if (rand == 0){
-                var tmp = calcUp(whiteSpaceX, whiteSpaceY);
+                var tmp = tileAbove(emptySpaceX, emptySpaceY);
                 if ( tmp != -1){
-                    swap(tmp);
+                    switchTiles(tmp);
                 }
             }
             if (rand == 1){
-                var tmp = calcDown(whiteSpaceX, whiteSpaceY);
+                var tmp = tileBelow(emptySpaceX, emptySpaceY);
                 if ( tmp != -1){
-                    swap(tmp);
+                    switchTiles(tmp);
                 }
             }
 
             if (rand == 2){
-                var tmp = calcLeft(whiteSpaceX, whiteSpaceY);
+                var tmp = tileLeft(emptySpaceX, emptySpaceY);
                 if ( tmp != -1){
-                    swap(tmp);
+                    switchTiles(tmp);
                 }
             }
 
             if (rand == 3)
             {
-                var tmp = calcRight(whiteSpaceX, whiteSpaceY);
+                var tmp = tileRight(emptySpaceX, emptySpaceY);
                 if (tmp != -1)
                 {
-                    swap(tmp);
+                    switchTiles(tmp);
                 }
             }
         }
@@ -77,19 +77,19 @@ window.onload = function (){
 };
 
 function checkCanMove(pos){ //can the piece move?
-    if (calcLeft(whiteSpaceX, whiteSpaceY) == (pos-1)){ //compare the tile to the left of the white space with the current tile (pos -1 because .innerHTML returns 1 to 15 and the for loop goes 0 to 14)
+    if (tileLeft(emptySpaceX, emptySpaceY) == (pos-1)){ //compare the tile to the left of the white space with the current tile (pos -1 because .innerHTML returns 1 to 15 and the for loop goes 0 to 14)
         return true; //yes it can
     }
 
-    if (calcDown(whiteSpaceX, whiteSpaceY) == (pos-1)){ //Is the current piece under the white space?
+    if (tileBelow(emptySpaceX, emptySpaceY) == (pos-1)){ //Is the current piece under the white space?
         return true; //yes it can
     }
 
-    if (calcUp(whiteSpaceX, whiteSpaceY) == (pos-1)){ //Is the current piece above the white space?
+    if (tileAbove(emptySpaceX, emptySpaceY) == (pos-1)){ //Is the current piece above the white space?
         return true; //yes it can
     }
 
-    if (calcRight(whiteSpaceX, whiteSpaceY) == (pos-1)){ //Is the current piece to the right of the white space?
+    if (tileRight(emptySpaceX, emptySpaceY) == (pos-1)){ //Is the current piece to the right of the white space?
         return true; //yes it can
     }
 }
@@ -120,7 +120,7 @@ function youWin(){
     timer = setTimeout(Blink, 100);
 }
 
-function checkFinish(){
+function isFinish(){
     var flag = true;
     for (var i = 0; i < pieces.length; i++) {
         var y = parseInt(pieces[i].style.top);
@@ -134,7 +134,7 @@ function checkFinish(){
     return flag;
 }
 
-function calcLeft(x, y){ //find the tile to the left of the white space
+function tileLeft(x, y){ //find the tile to the left of the white space
     var xx = parseInt(x);
     var yy = parseInt(y);
 
@@ -150,7 +150,7 @@ function calcLeft(x, y){ //find the tile to the left of the white space
     }
 }
 
-function calcRight (x, y){ //find the tile to the right of the white space
+function tileRight (x, y){ //find the tile to the right of the white space
     var xx = parseInt(x);
     var yy = parseInt(y);
     if (xx < 300){
@@ -164,7 +164,7 @@ function calcRight (x, y){ //find the tile to the right of the white space
     } 
 }
 
-function calcUp (x, y){ //find the tile above the white space
+function tileAbove (x, y){ //find the tile above the white space
     var xx = parseInt(x);
     var yy = parseInt(y);
     if (yy > 0){
@@ -179,7 +179,7 @@ function calcUp (x, y){ //find the tile above the white space
     }
 }
 
-function calcDown (x, y){ //find the tile below the white space
+function tileBelow (x, y){ //find the tile below the white space
     var xx = parseInt(x);
     var yy = parseInt(y);
     if (yy < 300){
@@ -194,12 +194,13 @@ function calcDown (x, y){ //find the tile below the white space
     } 
 }
 
-function swap (pos){
+function switchTiles (pos){
     var temp = pieces[pos].style.top;
-    pieces[pos].style.top = whiteSpaceY;
-    whiteSpaceY = temp;
+    pieces[pos].style.top = emptySpaceY;
+	
+    emptySpaceY = temp;
 
     temp = pieces[pos].style.left;
-    pieces[pos].style.left = whiteSpaceX;
-    whiteSpaceX = temp;
+    pieces[pos].style.left = emptySpaceX;
+    emptySpaceX = temp;
 }
